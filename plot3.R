@@ -1,0 +1,22 @@
+datatype <- c("character","character",rep("numeric",7))
+dataname <- read.table("~/Documents/References/Data Science/Exploratory Data Analysis/workingdirectory/household_power_consumption.txt",sep=";",nrows=1,stringsAsFactors=FALSE)
+data <- read.table("~/Documents/References/Data Science/Exploratory Data Analysis/workingdirectory/household_power_consumption.txt"
+                   ,header=FALSE,sep=";",skip=50000,nrows=30000,stringsAsFactors=FALSE
+                   ,col.names=dataname)
+data$Date <- as.character(data$Date)
+data$Time <- as.character(data$Time)
+data$Global_active_power <- as.numeric(data$Global_active_power)
+data$Sub_metering_1 <- as.numeric(data$Sub_metering_1)
+data$Sub_metering_2 <- as.numeric(data$Sub_metering_2)
+data$Sub_metering_3 <- as.numeric(data$Sub_metering_3)
+data$Time <- strptime(paste(data$Date,data$Time),format="%d/%m/%Y %H:%M:%S")
+data$Date <- as.Date(data$Date,format="%d/%m/%Y")
+dataRange <- as.Date(c("2007-02-01","2007-02-02"),format="%Y-%m-%d")
+df <- data[data$Date %in% dataRange,]
+png("plot3.png")
+plot(df$Time,df$Sub_metering_1,type="n",xlab="",ylab="Energy sub meterig")
+points(df$Time,df$Sub_metering_1,type="l")
+points(df$Time,df$Sub_metering_2,col="red",type="l")
+points(df$Time,df$Sub_metering_3,col="blue",type="l")
+legend("topright",lty=1,col=c(1,"red","blue"),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
+dev.off()
